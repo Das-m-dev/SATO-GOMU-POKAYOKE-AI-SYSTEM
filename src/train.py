@@ -3,6 +3,13 @@ from anomalib.engine import Engine
 from config import DATASET_DIR, OUTPUT_DIR, IMAGE_SIZE
 from model_factory import build_model
 
+# Default PatchCore preprocessing center-crops the image, which could cut off
+# the corner where defects are. Resize only, no crop.
+pre = PreProcessor(transform=Compose([
+    Resize(IMAGE_SIZE, antialias=True),
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+]))
+
 datamodule = Folder(
     name="seal",
     root=DATASET_DIR,
